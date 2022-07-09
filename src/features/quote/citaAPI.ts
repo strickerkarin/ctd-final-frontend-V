@@ -1,7 +1,7 @@
 import { API_URL } from "../../app/constants";
 import { ICita } from "./types";
 
-export const obtenerCita: (personaje?: string) => Promise<ICita> = async (
+export const obtenerCita: (character?: string) => Promise<ICita> = async (
   personaje
 ) => {
   if (personaje && parseInt(personaje)) {
@@ -13,10 +13,10 @@ export const obtenerCita: (personaje?: string) => Promise<ICita> = async (
   const [data] = await respuesta.json();
 
   const dataNormalizada = {
-    cita: data.quote,
-    personaje: data.character,
-    imagen: data.image,
-    direccionPersonaje: data.characterDirection,
+    quote: data.quote,
+    character: data.character,
+    image: data.image,
+    characterDirection: data.characterDirection,
   };
 
   return dataNormalizada;

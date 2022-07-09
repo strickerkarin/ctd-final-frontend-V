@@ -12,7 +12,7 @@ import { obtenerMensaje } from "./utils";
 
 function Cita() {
   const [valorInput, setValorInput] = useState("");
-  const { cita = "", personaje = "" } =
+  const { quote = "", character = "" } =
     useAppSelector(obtenerCitaDelEstado, shallowEqual) || {};
   const estadoPedido = useAppSelector(obtenerEstadoDelPedido);
 
@@ -27,8 +27,8 @@ function Cita() {
 
   return (
     <ContenedorCita>
-      <TextoCita>{obtenerMensaje(cita, estadoPedido)}</TextoCita>
-      <AutorCita>{personaje}</AutorCita>
+      <TextoCita>{obtenerMensaje(quote, estadoPedido)}</TextoCita>
+      <AutorCita>{character}</AutorCita>
       <Input
         aria-label="Author Cita"
         value={valorInput}
