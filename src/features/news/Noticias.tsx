@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { SuscribeImage, CloseButton as Close } from "../../assets";
 import { obtenerNoticias } from "./fakeRest";
+import { INoticiasNormalizadas } from "./types";
+import { normalizarNoticia } from "./utils";
+import CardNoticia from "./CardNoticia";
 import {
   CloseButton,
   TarjetaModal,
@@ -21,51 +24,23 @@ import {
   CotenedorTexto,
 } from "./styled";
 
-export interface INoticiasNormalizadas {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  fecha: number | string;
-  esPremium: boolean;
-  imagen: string;
-  descripcionCorta?: string;
-}
-
 const Noticias = () => {
   const [noticias, setNoticias] = useState<INoticiasNormalizadas[]>([]);
   const [modal, setModal] = useState<INoticiasNormalizadas | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const obtenerInformacion = async () => {
-      const respuesta = await obtenerNoticias();
-
-      const data = respuesta.map((n) => {
-        const titulo = n.titulo
-          .split(" ")
-          .map((str) => {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-          })
-          .join(" ");
-
-        const ahora = new Date();
-        const minutosTranscurridos = Math.floor(
-          (ahora.getTime() - n.fecha.getTime()) / 60000
-        );
-
-        return {
-          id: n.id,
-          titulo,
-          descripcion: n.descripcion,
-          fecha: `Hace ${minutosTranscurridos} minutos`,
-          esPremium: n.esPremium,
-          imagen: n.imagen,
-          descripcionCorta: n.descripcion.substring(0, 100),
-        };
-      });
-
-      setNoticias(data);
+      try {
+        const respuesta = await obtenerNoticias();
+        const data = respuesta?.map((n) => {
+          return normalizarNoticia(n);
+        });
+        setNoticias(data);
+      } catch (error) {
+        setError(JSON.stringify(error));
+      }
     };
-
     obtenerInformacion();
   }, []);
 
@@ -74,15 +49,7 @@ const Noticias = () => {
       <TituloNoticias>Noticias de los Simpsons</TituloNoticias>
       <ListaNoticias>
         {noticias.map((n) => (
-          <TarjetaNoticia>
-            <ImagenTarjetaNoticia src={n.imagen} />
-            <TituloTarjetaNoticia>{n.titulo}</TituloTarjetaNoticia>
-            <FechaTarjetaNoticia>{n.fecha}</FechaTarjetaNoticia>
-            <DescripcionTarjetaNoticia>
-              {n.descripcionCorta}
-            </DescripcionTarjetaNoticia>
-            <BotonLectura onClick={() => setModal(n)}>Ver más</BotonLectura>
-          </TarjetaNoticia>
+          <CardNoticia key={n.id} noticia={n} setModal={setModal} />       
         ))}
         {modal ? (
           modal.esPremium ? (
