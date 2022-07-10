@@ -1,6 +1,6 @@
 import BotonCerrar from "./BotonCerrar";
 import BotonSuscripcion from "./BotonSuscripcion";
-import { INoticiasNormalizadas } from "./types";
+import { ICardModalProps } from "./types";
 import {
   TarjetaModal,
   DescripcionModal,
@@ -16,14 +16,7 @@ const CardModal = ({
   imageAlt,
   titulo,
   descripcion,
-}: {
-  esPremium: boolean;
-  setModal: React.Dispatch<React.SetStateAction<null | INoticiasNormalizadas>>;
-  imageSrc: string;
-  imageAlt: string;
-  titulo: string;
-  descripcion: string;
-}) => {
+}: ICardModalProps) => {
   return (
     <TarjetaModal>
       <BotonCerrar setModal={setModal} />

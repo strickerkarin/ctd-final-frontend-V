@@ -7,3 +7,11 @@ export interface INoticiasNormalizadas {
   imagen: string;
   descripcionCorta?: string;
 }
+export interface ICardModalProps {
+  esPremium: boolean;
+  setModal: React.Dispatch<React.SetStateAction<null | INoticiasNormalizadas>>;
+  imageSrc: string;
+  imageAlt: string;
+  titulo: string;
+  descripcion: string;
+}

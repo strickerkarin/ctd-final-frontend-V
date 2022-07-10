@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-import { SuscribeImage, CloseButton as Close } from "../../assets";
+import { SuscribeImage } from "../../assets";
 import { obtenerNoticias } from "./fakeRest";
 import { INoticiasNormalizadas } from "./types";
 import { normalizarNoticia } from "./utils";
 import CardNoticia from "./CardNoticia";
 import CardModal from "./CardModal";
+import {
+  TITULO_NOTICIA_PREMIUM,
+  DESCRIPCION_NOTICIA_PREMIUM,
+  ALT_IMAGEN_PREMIUM
+} from "./constantes";
 import {
   ContenedorModal,
   ContenedorNoticias,
@@ -21,9 +26,7 @@ const Noticias = () => {
     const obtenerInformacion = async () => {
       try {
         const respuesta = await obtenerNoticias();
-        const data = respuesta?.map((n) => {
-          return normalizarNoticia(n);
-        });
+        const data = respuesta?.map((n) => normalizarNoticia(n));
         setNoticias(data);
       } catch (error) {
         setError(JSON.stringify(error));
@@ -40,32 +43,22 @@ const Noticias = () => {
         {noticias.map((n) => (
           <CardNoticia key={n.id} noticia={n} setModal={setModal} />
         ))}
-        {modal ? (
-          modal.esPremium ? (
-            <ContenedorModal>
-              <CardModal
-                esPremium={true}
-                setModal={setModal}
-                imageSrc={SuscribeImage}
-                imageAlt="mr-burns-excelent"
-                titulo="Suscríbete a nuestro Newsletter"
-                descripcion="Suscríbete a nuestro newsletter y recibe noticias de
-                    nuestros personajes favoritos."
-              />
-            </ContenedorModal>
-          ) : (
-            <ContenedorModal>
-              <CardModal
-                esPremium={false}
-                setModal={setModal}
-                imageSrc={modal.imagen}
-                imageAlt="news-image"
-                titulo={modal.titulo}
-                descripcion={modal.descripcion}
-              />
-            </ContenedorModal>
-          )
-        ) : null}
+        {modal && (
+          <ContenedorModal>
+            <CardModal
+              esPremium={modal.esPremium}
+              setModal={setModal}
+              imageSrc={modal.esPremium ? SuscribeImage : modal.imagen}
+              imageAlt={modal.esPremium ? ALT_IMAGEN_PREMIUM : "news-image"}
+              titulo={modal.esPremium ? TITULO_NOTICIA_PREMIUM : modal.titulo}
+              descripcion={
+                modal.esPremium
+                  ? DESCRIPCION_NOTICIA_PREMIUM
+                  : modal.descripcion
+              }
+            />
+          </ContenedorModal>
+        )}
       </ListaNoticias>
     </ContenedorNoticias>
   );
