@@ -8,8 +8,6 @@ import {
   BotonLectura,
 } from "./styled";
 
-//: INoticiasNormalizadas : React.Dispatch<React.SetStateAction<INoticiasNormalizadas | null>>}
-
 const CardNoticia = ({noticia, setModal}: {
   noticia: INoticiasNormalizadas;
   setModal: React.Dispatch<React.SetStateAction<INoticiasNormalizadas | null>>;

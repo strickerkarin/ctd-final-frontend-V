@@ -4,24 +4,12 @@ import { obtenerNoticias } from "./fakeRest";
 import { INoticiasNormalizadas } from "./types";
 import { normalizarNoticia } from "./utils";
 import CardNoticia from "./CardNoticia";
+import CardModal from "./CardModal";
 import {
-  CloseButton,
-  TarjetaModal,
   ContenedorModal,
-  DescripcionModal,
-  ImagenModal,
-  TituloModal,
-  TarjetaNoticia,
-  FechaTarjetaNoticia,
-  DescripcionTarjetaNoticia,
-  ImagenTarjetaNoticia,
-  TituloTarjetaNoticia,
   ContenedorNoticias,
   ListaNoticias,
   TituloNoticias,
-  BotonLectura,
-  BotonSuscribir,
-  CotenedorTexto,
 } from "./styled";
 
 const Noticias = () => {
@@ -47,49 +35,34 @@ const Noticias = () => {
   return (
     <ContenedorNoticias>
       <TituloNoticias>Noticias de los Simpsons</TituloNoticias>
+      {error && <p>{error}</p>}
       <ListaNoticias>
         {noticias.map((n) => (
-          <CardNoticia key={n.id} noticia={n} setModal={setModal} />       
+          <CardNoticia key={n.id} noticia={n} setModal={setModal} />
         ))}
         {modal ? (
           modal.esPremium ? (
             <ContenedorModal>
-              <TarjetaModal>
-                <CloseButton onClick={() => setModal(null)}>
-                  <img src={Close} alt="close-button" />
-                </CloseButton>
-                <ImagenModal src={SuscribeImage} alt="mr-burns-excelent" />
-                <CotenedorTexto>
-                  <TituloModal>Suscríbete a nuestro Newsletter</TituloModal>
-                  <DescripcionModal>
-                    Suscríbete a nuestro newsletter y recibe noticias de
-                    nuestros personajes favoritos.
-                  </DescripcionModal>
-                  <BotonSuscribir
-                    onClick={() =>
-                      setTimeout(() => {
-                        alert("Suscripto!");
-                        setModal(null);
-                      }, 1000)
-                    }
-                  >
-                    Suscríbete
-                  </BotonSuscribir>
-                </CotenedorTexto>
-              </TarjetaModal>
+              <CardModal
+                esPremium={true}
+                setModal={setModal}
+                imageSrc={SuscribeImage}
+                imageAlt="mr-burns-excelent"
+                titulo="Suscríbete a nuestro Newsletter"
+                descripcion="Suscríbete a nuestro newsletter y recibe noticias de
+                    nuestros personajes favoritos."
+              />
             </ContenedorModal>
           ) : (
             <ContenedorModal>
-              <TarjetaModal>
-                <CloseButton onClick={() => setModal(null)}>
-                  <img src={Close} alt="close-button" />
-                </CloseButton>
-                <ImagenModal src={modal.imagen} alt="news-image" />
-                <CotenedorTexto>
-                  <TituloModal>{modal.titulo}</TituloModal>
-                  <DescripcionModal>{modal.descripcion}</DescripcionModal>
-                </CotenedorTexto>
-              </TarjetaModal>
+              <CardModal
+                esPremium={false}
+                setModal={setModal}
+                imageSrc={modal.imagen}
+                imageAlt="news-image"
+                titulo={modal.titulo}
+                descripcion={modal.descripcion}
+              />
             </ContenedorModal>
           )
         ) : null}
